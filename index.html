@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Diyagram Oluşturucu</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Harici CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <div class="navbar">
+    <h3><i class="fas fa-shapes"></i> Şekiller</h3>
+    <button class="shape-btn" data-shape="triangle" data-tooltip="Üçgen Ekle">
+      <i class="fas fa-caret-up"></i> Üçgen
+    </button>
+    <button class="shape-btn" data-shape="rectangle" data-tooltip="Dikdörtgen Ekle">
+      <i class="fas fa-square"></i> Dikdörtgen
+    </button>
+    <button class="shape-btn" data-shape="square" data-tooltip="Kare Ekle">
+      <i class="fas fa-square-full"></i> Kare
+    </button>
+    <button class="shape-btn" data-shape="circle" data-tooltip="Çember Ekle">
+      <i class="fas fa-circle"></i> Çember
+    </button>
+    
+    <!-- Yazı Ayarları Paneli -->
+    <div class="control-panel" id="text-controls">
+      <h4><i class="fas fa-font"></i> Yazı Ayarları</h4>
+      <label for="fontSizeSelect">Font Boyutu (px):</label>
+      <select id="fontSizeSelect">
+        <option value="8">8</option>
+        <option value="10">10</option>
+        <option value="12">12</option>
+        <option value="14">14</option>
+        <option value="16" selected>16</option>
+        <option value="18">18</option>
+        <option value="20">20</option>
+        <option value="24">24</option>
+        <option value="28">28</option>
+        <option value="32">32</option>
+        <option value="36">36</option>
+        <option value="48">48</option>
+      </select>
+      <label><input type="checkbox" id="boldToggle"> Kalın (Bold)</label>
+      <label><input type="checkbox" id="italicToggle"> İtalik</label>
+      <label for="fontFamilySelect">Yazı Tipi:</label>
+      <select id="fontFamilySelect">
+        <option value="Poppins, Segoe UI, sans-serif" selected>Poppins</option>
+        <option value="Arial, sans-serif">Arial</option>
+        <option value="Times New Roman, serif">Times New Roman</option>
+        <option value="Courier New, monospace">Courier New</option>
+      </select>
+      <!-- Metin Rengi Seçici -->
+      <div class="color-picker-trigger text-color-picker-trigger" id="textColorPickerTrigger">
+        <label><i class="fas fa-font"></i> Metin Rengi:</label>
+        <div class="color-swatch" id="textCurrentColorSwatch" style="background-color: #000000;"></div>
+        <input type="hidden" id="textColorValue" value="#000000">
+        <div class="color-picker-popup" id="textColorPickerPopup">
+          <div class="color-section">
+            <h5>Tema Renkleri</h5>
+            <div class="color-grid" id="textThemeColors">
+              <!-- Tema renkleri JavaScript ile eklenecek -->
+            </div>
+          </div>
+          <div class="color-section">
+            <h5>Standart Renkler</h5>
+            <div class="color-grid" id="textStandardColors">
+              <!-- Standart renkler JavaScript ile eklenecek -->
+            </div>
+          </div>
+          <div class="color-section">
+            <h5>Son Kullanılan Renkler</h5>
+            <div class="color-grid" id="textRecentColors">
+              <!-- Son kullanılan renkler JavaScript ile eklenecek -->
+            </div>
+          </div>
+          <div class="color-section">
+            <h5>Özel Renk</h5>
+            <div class="custom-color-input">
+              <input type="color" id="textCustomColorPicker" value="#000000">
+              <label for="textCustomColorPicker">Özel Renk Seç</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- JSON Kontrol Paneli -->
+    <div class="control-panel" id="json-controls">
+      <h4><i class="fas fa-code"></i> JSON Verisi ile Diyagram Oluştur</h4>
+      <div class="json-tabs">
+        <div class="json-tab active" data-tab="manual">Manuel JSON</div>
+        <div class="json-tab" data-tab="form">Form ile Ekle</div>
+      </div>
+      <div id="manual-tab" class="json-tab-content active">
+        <textarea id="jsonEditor" placeholder="JSON verisi girin..."></textarea>
+        <button class="btn" id="jsonGenerateBtn">
+          <i class="fas fa-magic"></i> Diyagramı Oluştur
+        </button>
+      </div>
+      <div id="form-tab" class="json-tab-content">
+        <form id="jsonForm">
+          <div class="form-group">
+            <label for="itemText">Metin:</label>
+            <input type="text" id="itemText" placeholder="Görüntülenecek metin">
+          </div>
+          <div class="form-group">
+            <label for="itemLevel">Seviye:</label>
+            <select id="itemLevel">
+              <option value="1">Seviye 1 (En Üst)</option>
+              <option value="2">Seviye 2</option>
+              <option value="3">Seviye 3</option>
+              <option value="4">Seviye 4</option>
+              <option value="5">Seviye 5</option>
+              <option value="6">Seviye 6</option>
+              <option value="7">Seviye 7</option> 
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="itemId">ID (Benzersiz olmalı):</label>
+            <input type="text" id="itemId" placeholder="Örn: item1, item2, vb.">
+          </div>
+          <div class="form-group">
+            <label for="itemConnectedTo">Bağlanacağı Öğe:</label>
+            <select id="itemConnectedTo">
+              <option value="">Bağlantı Yok (Seviye 1 için)</option>
+              <!-- JavaScript ile doldurulacak -->
+            </select>
+          </div>
+          <div class="form-buttons">
+            <button type="button" class="btn success" id="addItemBtn">
+              <i class="fas fa-plus"></i> Öğe Ekle
+            </button>
+            <button type="button" class="btn info" id="updateJsonBtn">
+              <i class="fas fa-sync"></i> JSON Güncelle
+            </button>
+          </div>
+        </form>
+        <div class="json-item-list" id="jsonItemList">
+          <!-- JavaScript ile doldurulacak -->
+        </div>
+        <button class="btn" id="formGenerateBtn">
+          <i class="fas fa-magic"></i> Diyagramı Oluştur
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ana içerik -->
+  <div class="main-content">
+    <div class="top-menu">
+      <div class="logo">
+        <i class="fas fa-project-diagram"></i> Modern Diyagram Oluşturucu
+      </div>
+      <div class="tabs">
+        <div class="tab active">Anasayfa</div>
+        <div class="tab">Ekle</div>
+        <div class="tab">Tasarım</div>
+        <div class="tab">Düzen</div>
+      </div>
+    </div>
+    
+    <div class="header">
+      <div class="header-group">
+        <div class="color-picker-trigger" id="colorPickerTrigger">
+          <label><i class="fas fa-fill-drip"></i> Şekil Rengi:</label>
+          <div class="color-swatch" id="currentColorSwatch" style="background-color: #3498db;"></div>
+          <input type="hidden" id="shapeColor" value="#3498db">
+          <div class="color-picker-popup" id="colorPickerPopup">
+            <div class="color-section">
+              <h5>Tema Renkleri</h5>
+              <div class="color-grid" id="themeColors">
+                <!-- Tema renkleri JavaScript ile eklenecek -->
+              </div>
+            </div>
+            <div class="color-section">
+              <h5>Standart Renkler</h5>
+              <div class="color-grid" id="standardColors">
+                <!-- Standart renkler JavaScript ile eklenecek -->
+              </div>
+            </div>
+            <div class="color-section">
+              <h5>Son Kullanılan Renkler</h5>
+              <div class="color-grid" id="recentColors">
+                <!-- Son kullanılan renkler JavaScript ile eklenecek -->
+              </div>
+            </div>
+            <div class="color-section">
+              <h5>Özel Renk</h5>
+              <div class="custom-color-input">
+                <input type="color" id="customColorPicker" value="#3498db">
+                <label for="customColorPicker">Özel Renk Seç</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="header-group alignment-buttons">
+        <button id="alignLeftBtn" class="tooltip" data-tooltip="Sola Hizala">
+          <i class="fas fa-align-left"></i>
+        </button>
+        <button id="alignCenterBtn" class="tooltip" data-tooltip="Yatay Ortala">
+          <i class="fas fa-align-center"></i>
+        </button>
+        <button id="alignRightBtn" class="tooltip" data-tooltip="Sağa Hizala">
+          <i class="fas fa-align-right"></i>
+        </button>
+        <button id="alignTopBtn" class="tooltip" data-tooltip="Üste Hizala">
+          <i class="fas fa-arrow-up"></i>
+        </button>
+        <button id="alignMiddleBtn" class="tooltip" data-tooltip="Dikey Ortala">
+          <i class="fas fa-arrows-alt-v"></i>
+        </button>
+        <button id="alignBottomBtn" class="tooltip" data-tooltip="Alta Hizala">
+          <i class="fas fa-arrow-down"></i>
+        </button>
+      </div>
+      
+      <div class="header-group">
+        <button id="paintBrushBtn" class="tooltip" data-tooltip="Şekil boyama aracı">
+          <i class="fas fa-paint-brush"></i> Boyama
+        </button>
+        <button id="deleteBtn" class="tooltip" data-tooltip="Seçili şekli sil">
+          <i class="fas fa-trash-alt"></i> Sil
+        </button>
+        <button id="lineBtn" class="tooltip" data-tooltip="İki şekil arasına çizgi ekle">
+          <i class="fas fa-minus"></i> Çizgi
+        </button>
+        <button id="orthoLineBtn" class="tooltip" data-tooltip="İki şekil arasına ortogonal çizgi ekle">
+          <i class="fas fa-grip-lines"></i> Ortho Çizgi
+        </button>
+      </button>
+      <button id="urgoLineBtn" class="tooltip" data-tooltip="İki şekil arasına urgotonal çizgi ekle">
+        <i class="fas fa-grip-lines"></i> Urgo Çizgi
+      </button>
+      </div>
+      
+      <div class="header-group">
+        <button id="downloadBtn" class="tooltip" data-tooltip="PNG olarak kaydet">
+          <i class="fas fa-download"></i> PNG Kaydet
+        </button>
+        <button id="clearBtn" class="tooltip" data-tooltip="Tüm şekilleri temizle">
+          <i class="fas fa-broom"></i> Temizle
+        </button>
+      </div>
+      
+      <div class="header-group">
+        <button id="saveJsonBtn" class="tooltip" data-tooltip="JSON verisini dosya olarak kaydet">
+          <i class="fas fa-save"></i> JSON Kaydet
+        </button>
+        <button id="loadJsonBtn" class="tooltip" data-tooltip="JSON dosyasından yükle">
+          <i class="fas fa-file-upload"></i> JSON Yükle
+        </button>
+        <input type="file" id="jsonFileInput" style="display:none" accept=".json">
+      </div>
+      
+      <div class="header-group">
+        <button id="excelUploadBtn" class="tooltip" data-tooltip="Excel dosyası yükle">
+          <i class="fas fa-file-excel"></i> Excel Yükle
+        </button>
+        <input type="file" id="excelInput" style="display: none;" accept=".xlsx, .xls">
+      </div>
+    </div>
+    
+    <div class="canvas-container">
+      <div class="canvas" id="canvas"></div>
+    </div>
+    
+    <div class="status-bar">
+      <div class="status-info">
+        <i class="fas fa-check-circle"></i> Hazır
+      </div>
+      <div>
+        Şekil sayısı: <span id="shapeCount">0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Harici kütüphaneler -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- Harici JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
